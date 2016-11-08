@@ -1,0 +1,236 @@
+<apex:page docType="html-5.0" controller="CustomLoginController_Doctors" showHeader="false" sidebar="false" standardStylesheets="false">
+    
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css"/>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap-theme.min.css"/>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
+    
+    <style>
+    
+        body {
+            background-color: #B1BAC1;
+        } 
+        html, body {
+            height: 100%;
+            font-family: SFS, Arial, sans-serif;
+            color: #16325c;
+            font-size: 12px;
+        }   
+        #wrap {
+            height: 100%;
+        }
+        #main {
+            overflow: auto;
+            padding-bottom: 48px;
+        }   
+        @media only screen and (max-height: 610px)
+        #wrapper {
+            padding-top: 20px;
+        }
+        #wrapper {
+            padding: 20px 0px 0px 0px;
+            margin-top: 0px;
+            margin-bottom: 0px;
+            margin-left: auto;
+            margin-right: auto;
+            max-width: 380px;
+            transition: all 0.25s;
+        }
+        .standard_logo_wrapper {
+            height: 113px;
+            overflow: hidden;
+            width: 180px;
+            margin-left: auto;
+            margin-right: auto;
+            text-align: center;
+            display: table;
+        }
+        .mb24 {
+            margin-bottom: 24px;
+        }
+        .standard_logo {
+            margin-left: auto;
+            margin-right: auto;
+            margin-top: 19px;
+            vertical-align: middle;
+            max-width: 180px;
+            max-height: 113px;
+        }
+        #header, #footer {
+            color: #000000;
+        }
+        #content {
+            margin-bottom: 24px;
+        }
+        #content, .container {
+            background-color: #ffffff;
+        }
+        label {
+            display: inline-block;
+            margin-bottom: 5px;
+            font-weight: 100;
+            margin-left: -10px;
+            font-family: sans-serif;
+            color: #54698d;
+        }
+        input[type=checkbox], input[type=radio] {
+            margin: 12px 20px 5px -6px;
+            line-height: normal;
+        }
+        a{
+            font-size: 12px;
+        }
+        .padding-top-sm {
+            padding-top: 0.5em;
+        }
+        .padding-bottom-sm {
+            padding-bottom: 0.4em;
+        }
+        .panel-footer{
+            background-color:white;
+            padding: 18px 6px;
+        }   
+        #footer {
+            position: relative;
+            margin-top: 0px;
+            height: 41px;
+            width: 100%;
+            clear: both;
+            text-align: center;
+            font-size: 12px;
+        }
+        .form-control {
+            height: 45px;
+            box-shadow: none;
+            width: 106%;
+            margin-left: -10px;
+        }
+        input[type=submit].btn-block {
+            margin-left: -10px;
+            margin-top: 8px;
+            width: 106%;
+        }
+        .btn{
+            transition:0;
+        }
+        .btn-info {
+            text-shadow: 0 0 0 rgba(0,0,0,0);
+            box-shadow: inset 0 0px 0 rgba(255,255,255,.15),0 0px 0px rgba(0,0,0,0.075);
+            border-color: #28a4c9;
+            font-size: 15px;    
+        }
+        .btn-lg {
+            border-radius: 4px;
+        }
+        .idlist {
+            max-height: 205px;
+            overflow: auto;
+            clear: both;
+        }
+    
+        .userName {
+            border-radius: 3px;
+            border: 1px solid #CCC;
+            padding: 8px 0px 8px 8px;
+            background-color: #f3f5f6;
+            border-top: 1px solid #CCC;
+            border-bottom: 1px solid #CCC;
+            border-left: 1px solid #CCC;
+            border-right: 1px solid #CCC;
+            cursor: pointer;
+            border-collapse: separate;
+            border-spacing: 2px;
+            border-color: grey;
+            font-family: "Helvetica Neue Regular", Helvetica, sans-serif;
+            font-weight: 300;
+            font-size: 13px;
+            color: #586064;
+            display: block;
+            margin-right: 14px;
+        }
+        #error{
+            color: #CF4F43;
+            margin-bottom: 14px;
+            font-size: 12px;
+        }
+    </style>
+    
+    <div id="wrap">
+        <div id="main">
+            <div id="wrapper">
+                <div id="logo_wrapper" class="standard_logo_wrapper mb24">
+                    <h1 style="height: 100%; display: table-cell; vertical-align: bottom;">
+                        <apex:image url="{!$Resource.doctors_logo}" width="180" height="97" style="margin-top: 37px;" alt="Doctors application" />
+                    </h1>
+                </div>
+                <div id="header" class="mb24" style="display: none;"></div>
+                
+                <div id="content" style="display: block;">
+                    <div class="panel panel-default col-md-12">
+                         <div class="panel-body">
+                             <div id="signinalert">
+                             <span style="color:#cc0000">
+                                <apex:pageMessages id="error"/>
+                             </span>
+                             
+                         </div>
+                         <apex:form id="theForm" forceSSL="true" >
+                            <!-- Login with Saved User -->
+                            <apex:outputPanel rendered="{!loginWithOtherUser == false}">
+                                <label class="padding-top-sm">Select a username:</label>
+                                <div class="idlist">
+                                    <apex:repeat value="{!userNameSet}" var="userName">
+                                        <div class="userName">
+                                            <apex:commandLink value="{!userName}" action="{!chooseThis}">
+                                                <apex:param value="{!userName}" name="selected"/>
+                                            </apex:commandLink>
+                                        </div>
+                                        <br/>
+                                    </apex:repeat>
+                                </div>
+                                <apex:commandLink value="Log in with a different username" action="{!loginWithUser}"/>
+                            </apex:outputPanel> 
+                                
+                            <!-- login form -->
+                            <apex:outputPanel rendered="{!loginWithOtherUser}">
+                                <div styleClass="row">
+                                    <apex:commandLink value="{!noOfUserNames} saved username{!IF(noOfUserNames > 1,'s','')}" action="{!chooseExistingUser}" rendered="{!noOfUserNames > 0}"/>
+                                </div>
+                                    
+                                <label class="padding-top-sm">Username</label>
+                                <div class="row"> 
+                                    <div class="col-md-12 padding-bottom-sm ">
+                                            <apex:inputText value="{!userName}" id="userName" styleClass="form-control"/>
+                                    </div>
+                                </div>
+                                
+                                <label class="padding-top-sm">Password</label>
+                                <div class="row">
+                                    <div class="col-md-12 padding-bottom-sm">
+                                        <apex:inputSecret value="{!password}" id="password" styleClass="form-control" html-type="password"/>
+                                    </div>
+                                </div>
+                                <div class="row padding-top-sm">
+                                    <div class="col-md-12 padding-bottom-sm">
+                                        <apex:commandButton disabled="false" value="Login" styleClass="btn btn-info btn-block btn-lg " action="{!login}"/>
+                                    </div>
+                                </div>
+                                
+                                <div class="w0 pr ln3 p16 remember">
+                                    <apex:inputCheckbox value="{!rememberMe}" id="rememberUn"/>
+                                    <apex:outputLabel value="Remember me" for="rememberUn" style="font-size:14px; color:#16325c;"/>
+                                </div>
+                            </apex:outputPanel>
+                         </apex:form>
+                        </div>
+                        <div class="panel-footer">
+                            <apex:outputLink value="Forgot Password? "> {!$Label.site.forgot_your_password_q}</apex:outputLink>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>  
+        
+        <div id="footer">© 2016 Doctors application. All rights reserved.</div>   
+    </div>
+    
+</apex:page>
